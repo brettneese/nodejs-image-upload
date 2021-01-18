@@ -5,12 +5,17 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server"
+    "start": "pm2 start server.js",
+    "restart": "pm2 restart server.js",
+    "stop": "pm2 stop server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
     "multer": "^1.3.0"
+  },
+  "devDependencies": {
+    "pm2": "^4.5.1"
   }
 }

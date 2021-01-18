@@ -1,19 +1,30 @@
-const express = require('express');
-const multer = require('multer');
-const upload = multer({dest: __dirname + '/uploads/images'});
+const express = require("express");
+const multer = require("multer");
+const upload = multer({ dest: __dirname + "/uploads/images" });
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-app.post('/upload', upload.single('photo'), (req, res) => {
-    if(req.file) {
-        res.json(req.file);
+app.post("/upload", upload.single("photo"), async function (req, res) {
+  if (req.file) {
+    const { stdout, stderr } = await exec(
+      `\"C:\\Program Files\\IrfanView\\i_view32.exe\" ${req.file.path} /print`
+    );
+
+    if (stderr) {
+      console.error(`error: ${stderr}`);
     }
-    else throw 'error';
+
+    console.log(`sent photo to printer`);
+
+    res.json(req.file);
+  } else throw "error";
 });
 
 app.listen(PORT, () => {
-    console.log('Listening at ' + PORT );
+  console.log("Listening at " + PORT);
 });
